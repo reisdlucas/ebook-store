@@ -13,7 +13,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Long idBook, Book book) {
+    public Book createBook(Book book) {
         return bookRepository.save(book);
     }
 }
