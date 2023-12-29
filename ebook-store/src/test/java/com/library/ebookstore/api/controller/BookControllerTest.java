@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookController.class)
 public class BookControllerTest {
@@ -64,6 +66,11 @@ public class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookRequest)));
         //then - verify the result
+        response.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(book.getId().intValue()))
+                .andExpect(jsonPath("$.name").value(book.getName()))
+                .andExpect(jsonPath("$.writer").value(book.getWriter()))
+                .andExpect(jsonPath("$.company").value(book.getCompany()));
     }
 
 }
