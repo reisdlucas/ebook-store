@@ -4,6 +4,9 @@ import com.library.ebookstore.api.http.resources.request.BookRequest;
 import com.library.ebookstore.api.http.resources.response.BookResponse;
 import com.library.ebookstore.domain.model.Book;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BookCreator {
     public static Book newBook() {
         return Book.builder()
@@ -29,5 +32,12 @@ public class BookCreator {
                 .writer(newBook().getWriter())
                 .company(newBook().getCompany())
                 .build();
+    }
+
+    public static List<Book> bookList() {
+        Book savedBook1 = newBook();
+        Book savedBook2 = newBook();
+        savedBook2.setId(2L);
+        return Arrays.asList(savedBook1, savedBook2);
     }
 }
