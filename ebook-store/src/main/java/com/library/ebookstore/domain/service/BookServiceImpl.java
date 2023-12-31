@@ -4,6 +4,8 @@ import com.library.ebookstore.domain.model.Book;
 import com.library.ebookstore.domain.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
@@ -13,7 +15,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book book) {
+    public Book create(Book book) {
         return bookRepository.save(book);
+    }
+    @Override
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 }
