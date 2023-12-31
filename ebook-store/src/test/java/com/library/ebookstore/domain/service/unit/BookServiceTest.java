@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -31,9 +33,23 @@ public class BookServiceTest {
         //given - precondition or setup
         given(bookRepository.save(book)).willReturn(book);
         //when - action or the behavior to test
-        Book savedBook = bookService.createBook(book);
+        Book savedBook = bookService.create(book);
         //then - verify the output
         assertThat(savedBook).isNotNull();
+    }
+
+    @DisplayName("JUnit: BookService.findAll()")
+    @Test
+    void givenBookList_whenFindAllBooks_thenReturnBookList() {
+        //given - precondition or setup
+        List<Book> bookList = BookCreator.bookList();
+        given(bookRepository.findAll()).willReturn(bookList);
+        //when - action or behavior to test
+        List<Book> list = bookService.findAll();
+        //then - verify the output
+        assertThat(list)
+                .isNotNull()
+                .hasSizeGreaterThan(1);
     }
 
 }
