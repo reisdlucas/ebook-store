@@ -57,7 +57,7 @@ public class BookControllerTest {
         //given - precondition or setup
         given(bookMapper.mapRequestToEntity(any(BookRequest.class)))
                 .willReturn(book);
-        given(bookService.createBook(any(Book.class)))
+        given(bookService.create(any(Book.class)))
                 .willReturn(book);
         given(bookMapper.mapEntityToResponse(book))
                 .willReturn(bookResponse);
