@@ -17,9 +17,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,6 +45,8 @@ public class BookControllerTest {
 
     private Book book;
 
+    private List<Book> bookList;
+
     private BookResponse bookResponse;
 
     private BookRequest bookRequest;
@@ -47,6 +54,7 @@ public class BookControllerTest {
     @BeforeEach
     void setUp() {
         book = BookCreator.newBook();
+        bookList = BookCreator.bookList();
         bookResponse = BookCreator.bookResponse();
         bookRequest = BookCreator.bookRequest();
     }
@@ -71,6 +79,20 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.name").value(book.getName()))
                 .andExpect(jsonPath("$.writer").value(book.getWriter()))
                 .andExpect(jsonPath("$.company").value(book.getCompany()));
+    }
+
+    @DisplayName("JUnit: BookController.findAll()")
+    @Test
+    void givenBookList_whenFindAll_thenReturnBookList() throws Exception {
+        //given - precondition or setup
+        given(bookService.findAll()).willReturn(bookList);
+        //when - action or behavior to test
+        ResultActions response = mockMvc.perform(get("/book"));
+        //then - verify the result
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()",
+                        is(bookList.size())));
     }
 
 }
