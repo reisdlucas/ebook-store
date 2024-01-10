@@ -1,0 +1,11 @@
+version: "3.1"
+services:
+  postgres-springboot:
+    image: postgres
+    container_name: book-store
+    environment:
+      POSTGRES_USER: book-store
+      POSTGRES_PASSWORD: book-store
+      POSTGRES_DB: book-store
+    ports:
+      - "1298:5432"
