@@ -1,5 +1,6 @@
 package com.library.ebookstore.domain.service;
 
+import com.library.ebookstore.domain.exception.NotFoundException;
 import com.library.ebookstore.domain.model.Book;
 import com.library.ebookstore.domain.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findAll() {
         return bookRepository.findAll();
+    }
+
+    @Override
+    public Book findById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Book not found"));
     }
 }
