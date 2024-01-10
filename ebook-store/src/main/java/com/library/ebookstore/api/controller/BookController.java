@@ -69,5 +69,17 @@ public class BookController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(bookResponse);
     }
+    @GetMapping("/{idBook}")
+    @Operation(description = "Find books by id", summary = "Find books by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfull Operation",
+            content = {@Content(mediaType = "application/json",
+            schema = @Schema(implementation = BookResponse.class))}),
+    })
+    public ResponseEntity<BookResponse> findById(@PathVariable(name = "idBook") Long idBook) {
+        Book book = bookService.findById(idBook);
+        BookResponse bookResponse = bookMapper.mapEntityToResponse(book);
+        return ResponseEntity.ok(bookResponse);
+    }
 
 }
