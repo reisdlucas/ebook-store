@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -50,6 +51,17 @@ public class BookServiceTest {
         assertThat(list)
                 .isNotNull()
                 .hasSizeGreaterThan(1);
+    }
+
+    @DisplayName("JUnit: BookService.findById(Long)")
+    @Test
+    void givenBookId_whenFindBookById_thenReturnBookObject() {
+        //given - precondition or setup
+        given(bookRepository.findById(book.getId())).willReturn(Optional.of(book));
+        //when - action or behavior to test
+        Book savedBook = bookService.findById(book.getId());
+        //then - verify the output
+        assertThat(savedBook).isNotNull();
     }
 
 }
