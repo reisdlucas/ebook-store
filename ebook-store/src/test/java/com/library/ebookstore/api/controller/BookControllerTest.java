@@ -95,4 +95,21 @@ public class BookControllerTest {
                         is(bookList.size())));
     }
 
+    @DisplayName("JUnit: BookController.findById(Long)")
+    @Test
+    void givenBookId_whenFindById_thenReturnBookObject() throws Exception {
+        //given - precondition or setup
+        given(bookService.findById(book.getId())).willReturn(book);
+        given(bookMapper.mapEntityToResponse(book)).willReturn(bookResponse);
+        //when - action or behavior to test
+        ResultActions response = mockMvc.perform(get("/book/{idBook}", book.getId()));
+        //then - verify output
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(book.getId()))
+                .andExpect(jsonPath("$.name").value(book.getName()))
+                .andExpect(jsonPath("$.writer").value(book.getWriter()))
+                .andExpect(jsonPath("$.company").value(book.getCompany()));
+    }
+
 }
