@@ -6,6 +6,7 @@ import com.library.ebookstore.core.mapper.BookMapper;
 import com.library.ebookstore.domain.model.Book;
 import com.library.ebookstore.domain.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -79,6 +80,21 @@ public class BookController {
     public ResponseEntity<BookResponse> findById(@PathVariable(name = "idBook") Long idBook) {
         Book book = bookService.findById(idBook);
         BookResponse bookResponse = bookMapper.mapEntityToResponse(book);
+        return ResponseEntity.ok(bookResponse);
+    }
+    @PutMapping(value = "/{idBook}")
+    @Operation(description = "Update book", summary = "Update book")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfull Operation",
+            content = {@Content(mediaType = "application/json", schema = @Schema(implementation = BookResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    public ResponseEntity<BookResponse> update(@Parameter(description = "id book", required = true)
+                                               @PathVariable(name = "idBook") Long idBook,
+                                               @RequestBody BookRequest bookRequest) {
+        Book book = bookMapper.mapRequestToEntity(bookRequest);
+        Book update = bookService.update(idBook, book);
+        BookResponse bookResponse = bookMapper.mapEntityToResponse(update);
         return ResponseEntity.ok(bookResponse);
     }
 
