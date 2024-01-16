@@ -21,9 +21,9 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -110,6 +110,30 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.name").value(book.getName()))
                 .andExpect(jsonPath("$.writer").value(book.getWriter()))
                 .andExpect(jsonPath("$.company").value(book.getCompany()));
+    }
+
+    @DisplayName("JUnit: BookController.update(Long, Book)")
+    @Test
+    void givenBookId_whenUpdateBook_thenReturnBookResponse() throws Exception {
+        //given - precondition or setup
+        BookRequest bookRequest = new BookRequest();
+        bookRequest.setName("NewName");
+        bookRequest.setWriter("NewWriter");
+        bookRequest.setCompany("NewCompany");
+
+        given(bookMapper.mapRequestToEntity(bookRequest)).willReturn(book);
+        given(bookService.update(eq(1L), any(Book.class))).willReturn(book);
+        given(bookMapper.mapEntityToResponse(book)).willReturn(bookResponse);
+        //when - action or behavior to test
+        ResultActions response = mockMvc.perform(put("/book/{idBook}", book.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(bookRequest)));
+        //thwn - verify output
+        response.andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.name").value(bookResponse.getName()))
+                .andExpect(jsonPath("$.writer").value(bookResponse.getWriter()))
+                .andExpect(jsonPath("$.company").value(bookResponse.getCompany()));
     }
 
 }
