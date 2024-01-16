@@ -16,6 +16,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -78,4 +80,14 @@ public class BookServiceTest {
         assertThat(updatedBook.getCompany()).isEqualTo("company");
     }
 
+    @DisplayName("JUnit: BookService.delete(idBook)")
+    @Test
+    void givenBookId_whenDeleteBook_thenBookIsDeleted() {
+        //given - precondition or setup
+        when(bookRepository.findById(book.getId())).thenReturn(Optional.of(book));
+        //when - action or behavior to test
+        bookService.delete(book.getId());
+        //then - verify the output
+        verify(bookRepository).delete(book);
+    }
 }
