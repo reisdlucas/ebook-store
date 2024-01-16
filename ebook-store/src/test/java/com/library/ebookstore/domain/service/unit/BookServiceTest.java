@@ -64,4 +64,18 @@ public class BookServiceTest {
         assertThat(savedBook).isNotNull();
     }
 
+    @DisplayName("JUnit: BookService.update(idBook, book)")
+    @Test
+    void givenBookObject_whenUpdateBook_thenReturnUpdatedBook() {
+        //given - precondition or setup
+        given(bookRepository.findById(book.getId())).willReturn(Optional.of(book));
+        given(bookRepository.save(book)).willReturn(book);
+        //when - action or behavior to test
+        Book updatedBook = bookService.update(1L, book);
+        //then - verify the output
+        assertThat(updatedBook.getName()).isEqualTo("name");
+        assertThat(updatedBook.getWriter()).isEqualTo("writer");
+        assertThat(updatedBook.getCompany()).isEqualTo("company");
+    }
+
 }
