@@ -23,6 +23,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -134,6 +135,18 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.name").value(bookResponse.getName()))
                 .andExpect(jsonPath("$.writer").value(bookResponse.getWriter()))
                 .andExpect(jsonPath("$.company").value(bookResponse.getCompany()));
+    }
+
+    @DisplayName("JUnit: BookController.delete(idBook)")
+    @Test
+    void givenBookId_whenDeleteBook_thenReturn204() throws Exception {
+        //given - precondition or setup
+        willDoNothing().given(bookService).delete(book.getId());
+        //when - action or behavior to test
+        ResultActions response = mockMvc.perform(delete("/book/{idBook}", book.getId()));
+        //then - verify the output
+        response.andExpect(status().isNoContent())
+                .andDo(print());
     }
 
 }
