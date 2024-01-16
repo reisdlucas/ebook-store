@@ -37,4 +37,10 @@ public class BookServiceImpl implements BookService {
         BeanUtils.copyProperties(book, bookToUpdate, "id","book");
         return bookRepository.save(bookToUpdate);
     }
+
+    @Override
+    public void delete(Long idBook) {
+        Book book = findById(idBook);
+        bookRepository.delete(book);
+    }
 }
